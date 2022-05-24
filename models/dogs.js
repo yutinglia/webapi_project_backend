@@ -18,6 +18,26 @@ exports.getAll = async function () {
     })
 }
 
+exports.getByID = async function (id) {
+    return await db.query({
+        query: `SELECT
+                dogs.id AS id,
+                dogs.type AS type,
+                dogs.name AS name,
+                dogs.birthday AS birthday,
+                dogs.shelter AS shelter_id,
+                dogs.chip_id AS chip_id,
+                dogs.img AS img,
+                shelters.name AS shelter_name,
+                shelters.address AS shelter_address
+                FROM dogs
+                LEFT JOIN shelters
+                ON dogs.shelter = shelters.id
+                WHERE dogs.id = ?`,
+        param: [id]
+    })
+}
+
 exports.getByPage = async function (p = -1, l = -1) {
     const page = parseInt(p);
     const limit = parseInt(l);

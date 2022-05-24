@@ -42,13 +42,15 @@ router.post('/', dogImgUpload.single('image'), asyncHandler(async function (req,
 }));
 
 router.put('/', dogImgUpload.single('image'), asyncHandler(async function (req, res, next) {
-    const { id, name, type, chip_id, birthday, shelter, img } = req.body;
+    const { id, name, type, chip_id, birthday, shelter } = req.body;
     if (!id, !name || !type || !chip_id || !birthday || !shelter) { return res.status(500).send({ status: 2, err: "Please PUT all data" }); }
     // console.log(name, type, chip, birthday, shelter);
     // console.log(req.body);
-    // delete old image
-    if (img && req.file) {
-        fs.unlink(path.join(__dirname, '..', 'public', 'images', 'dogs', img), (err) => {
+    // delete old image when update image
+    const dog = await dogs.getByID(id);
+    const oldImg = dog[0].img;
+    if (oldImg && req.file) {
+        fs.unlink(path.join(__dirname, '..', 'public', 'images', 'dogs', oldImg), (err) => {
             if (err) throw err
         });
     }
