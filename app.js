@@ -18,6 +18,7 @@ var checkAuthLevel2 = require('./middlewares/auth/checkAuthLevel2')
 
 var usersWithAuthRouter = require('./routes/usersWithAuth');
 var dogsWithAuthLevel1Router = require('./routes/dogsWithAuthLevel1')
+var favoritesWithAuthLevel2Router = require('./routes/favoritesWithAuthLevel2')
 
 var app = express();
 
@@ -58,6 +59,7 @@ app.use('/users', usersWithAuthRouter);
 
 // check user auth level higher then or equal to public
 app.use(checkAuthLevel2);
+app.use('/favorites', favoritesWithAuthLevel2Router);
 
 
 // check user auth level higher then or equal to worker

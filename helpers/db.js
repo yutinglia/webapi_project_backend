@@ -30,6 +30,65 @@ const db_query = (queryObj) => new Promise((resolve, reject) => {
 
 exports.query = db_query;
 
+// [[{}OR{}]AND[{}OR{}]]
+// example
+/*
+[
+    [
+        {
+            key: "dogs.name",
+            like: true,
+            value: query.name
+        },
+        {
+            key: "dogs.type",
+            like: true,
+            value: query.type
+        },
+        {
+            key: "dogs.chip_id",
+            like: true,
+            value: query.chip_id
+        }
+    ],
+    [
+        {
+            key: "dogs.shelter",
+            like: false,
+            value: query.shelter
+        }
+    ]
+]
+*/
+exports.makeQuery = (query, queryAdapter) => {
+    let queryList = queryAdapter(query);
+    let processedQueryList = [];
+    for (let block of queryList) {
+        let processedBlock = block.filter(query => query.value)
+        processedQueryList.push(processedBlock);
+    }
+    if (processedQueryList.flat(1).length === 0) return { sql: "", param: [] };
+    let querySql = "WHERE";
+    let queryValues = [];
+    for (let block of processedQueryList) {
+        if (block.length > 0) {
+            querySql += ` (`;
+        }
+        for (let query of block) {
+            if (query.key && query.value) {
+                querySql += ` ${query.key} ${query.like ? "LIKE ?" : "= ?"} OR`;
+                queryValues.push(query.like ? `%${query.value}%` : query.value);
+            }
+        }
+        if (block.length > 0) {
+            querySql = querySql.slice(0, -2);
+            querySql += `)  AND `;
+        }
+    }
+    querySql = querySql.slice(0, -5);
+    return { sql: querySql, param: queryValues };
+}
+
 // if you need pass the select result or processed data to next query, please set param "pass_data" in next query
 exports.doTransaction = (q) => new Promise((resolve, reject) => {
     const querys = q;
