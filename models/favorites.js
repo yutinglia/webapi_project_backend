@@ -26,3 +26,10 @@ exports.delete = async function (user, dog) {
         param: [user, dog]
     })
 }
+
+exports.deleteByDog = async function (id) {
+    return await db.query({
+        query: `DELETE FROM favorites WHERE dog=?`,
+        param: [id]
+    })
+}

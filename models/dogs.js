@@ -126,3 +126,10 @@ exports.add = async function (dog) {
         param: values
     })
 }
+
+exports.delete = async function (id) {
+    return await db.query({
+        query: `DELETE FROM dogs WHERE id=?`,
+        param: [id]
+    })
+}

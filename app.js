@@ -4,12 +4,26 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors')
 var config = require('./config')
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+
+passport.use(new GoogleStrategy({
+    clientID: config.GOOGLE_OAUTH.ID,
+    clientSecret: config.GOOGLE_OAUTH.PWD,
+    callbackURL: "http://localhost:3001/auth/google/callback",
+},
+    (accessToken, refreshToken, profile, cb) => {
+        return cb(null, profile);
+    }
+));
 
 var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
 var usersRouter = require('./routes/users');
 var dogsRouter = require('./routes/dogs');
 var sheltersRouter = require('./routes/shelters')
+
+var googleAuthRouter = require('./routes/auth')
 
 var checkAndRefreshToken = require('./middlewares/auth/checkAndRefreshToken')
 var checkAuthLevel0 = require('./middlewares/auth/checkAuthLevel0')
@@ -19,6 +33,9 @@ var checkAuthLevel2 = require('./middlewares/auth/checkAuthLevel2')
 var usersWithAuthRouter = require('./routes/usersWithAuth');
 var dogsWithAuthLevel1Router = require('./routes/dogsWithAuthLevel1')
 var favoritesWithAuthLevel2Router = require('./routes/favoritesWithAuthLevel2')
+var messagesWithAuthLevel2Router = require('./routes/messagesWithAuthLevel2')
+var messagesWithAuthLevel1Router = require('./routes/messagesWithAuthLevel1')
+var signUpCodeWithAuthLevel0Router = require('./routes/signUpCodeWithAuthLevel0')
 
 var app = express();
 
@@ -40,7 +57,7 @@ app.use('/login', loginRouter);
 app.use('/users', usersRouter);
 app.use('/dogs', dogsRouter);
 app.use('/shelters', sheltersRouter);
-
+app.use('/auth', googleAuthRouter);
 
 // with auth
 
@@ -60,16 +77,18 @@ app.use('/users', usersWithAuthRouter);
 // check user auth level higher then or equal to public
 app.use(checkAuthLevel2);
 app.use('/favorites', favoritesWithAuthLevel2Router);
+app.use('/messages', messagesWithAuthLevel2Router);
 
 
 // check user auth level higher then or equal to worker
 app.use(checkAuthLevel1);
 app.use('/dogs', dogsWithAuthLevel1Router);
+app.use('/messages', messagesWithAuthLevel1Router);
 
 
 // check user auth level higher then or equal to admin
 app.use(checkAuthLevel0);
-
+app.use('/sign-up-code', signUpCodeWithAuthLevel0Router);
 
 
 // error handler

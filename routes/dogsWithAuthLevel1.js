@@ -6,6 +6,7 @@ const multer = require('multer')
 var path = require('path')
 const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
+var favorites = require('../models/favorites');
 
 const dogsImgStorage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -65,6 +66,17 @@ router.put('/', dogImgUpload.single('image'), asyncHandler(async function (req, 
     });
 
     if (result) {
+        res.json({ status: 0 });
+    } else {
+        res.status(500).json({ status: 2, err: "Unknown Error" });
+    }
+}));
+
+router.delete('/:id', asyncHandler(async function (req, res, next) {
+    const { id } = req.params;
+    const result = await dogs.delete(id);
+    const result2 = await favorites.deleteByDog(id);
+    if (result && result2) {
         res.json({ status: 0 });
     } else {
         res.status(500).json({ status: 2, err: "Unknown Error" });
