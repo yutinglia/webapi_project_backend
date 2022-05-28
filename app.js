@@ -4,26 +4,12 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors')
 var config = require('./config')
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-
-passport.use(new GoogleStrategy({
-    clientID: config.GOOGLE_OAUTH.ID,
-    clientSecret: config.GOOGLE_OAUTH.PWD,
-    callbackURL: "http://localhost:3001/auth/google/callback",
-},
-    (accessToken, refreshToken, profile, cb) => {
-        return cb(null, profile);
-    }
-));
 
 var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
 var usersRouter = require('./routes/users');
 var dogsRouter = require('./routes/dogs');
 var sheltersRouter = require('./routes/shelters')
-
-var googleAuthRouter = require('./routes/auth')
 
 var checkAndRefreshToken = require('./middlewares/auth/checkAndRefreshToken')
 var checkAuthLevel0 = require('./middlewares/auth/checkAuthLevel0')
@@ -57,7 +43,7 @@ app.use('/login', loginRouter);
 app.use('/users', usersRouter);
 app.use('/dogs', dogsRouter);
 app.use('/shelters', sheltersRouter);
-app.use('/auth', googleAuthRouter);
+
 
 // with auth
 

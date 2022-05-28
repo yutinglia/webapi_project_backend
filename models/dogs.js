@@ -93,7 +93,7 @@ exports.update = async function (dog) {
     let values = Object.values(dog)
     let sql = "";
     for (key of keys) {
-        sql += `${key} =?, `
+        sql += `${key} =?,`
     }
     sql = sql.slice(0, -1);
     values.push(id);

@@ -7,6 +7,8 @@
 var app = require('../app');
 var debug = require('debug')('backend:server');
 var http = require('http');
+var socket_io = require('../socket_io');
+var config = require('../config')
 
 /**
  * Get port from environment and store in Express.
@@ -20,6 +22,11 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+socket_io.attach(server, {
+  cors: {
+    origin: config.REACT_SERVER_URL
+  }
+});
 
 /**
  * Listen on provided port, on all network interfaces.

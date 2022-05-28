@@ -6,6 +6,13 @@ exports.getAll = async function () {
     })
 }
 
+exports.getByID = async function (id) {
+    return await db.query({
+        query: `SELECT * FROM shelters WHERE id =?`,
+        param: [id]
+    })
+}
+
 exports.add = async function (shelter) {
     let keys = Object.keys(shelter)
     let values = Object.values(shelter)

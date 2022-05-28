@@ -1,12 +1,23 @@
 var express = require('express');
 var router = express.Router();
 var dogs = require('../models/dogs');
+var shelters = require('../models/shelters');
 const asyncHandler = require('express-async-handler')
 const multer = require('multer')
 var path = require('path')
 const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
 var favorites = require('../models/favorites');
+var config = require('../config')
+
+const { TwitterApi } = require("twitter-api-v2");
+
+const twitterClient = new TwitterApi({
+    appKey: config.TWITTER_API_KEYS.API_KEY,
+    appSecret: config.TWITTER_API_KEYS.API_KEY_SECRET,
+    accessToken: config.TWITTER_API_KEYS.ACCESS_TOKEN,
+    accessSecret: config.TWITTER_API_KEYS.ACCESS_TOKEN_SECRET
+})
 
 const dogsImgStorage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -25,7 +36,9 @@ router.post('/', dogImgUpload.single('image'), asyncHandler(async function (req,
     // console.log(req.file);
     // console.log(req.body);
     if (!name || !type || !chip_id || !birthday || !shelter) { return res.status(500).send({ status: 2, err: "Please POST all data" }); }
-    // console.log(name, type, chip_id, birthday, shelter);
+
+    const shelterInfo = (await shelters.getByID(shelter))[0];
+
     const result = await dogs.add({
         name,
         type,
@@ -34,6 +47,17 @@ router.post('/', dogImgUpload.single('image'), asyncHandler(async function (req,
         shelter,
         img: req.file ? req.file.filename : undefined
     });
+
+    await twitterClient.v2.tweet(`
+--For School Project--
+A new dog is posted to the website:
+Name: ${name}
+Type: ${type}
+Chip ID: ${chip_id}
+Birthday: ${new Date(birthday).toLocaleDateString()}
+Shelter: ${shelterInfo.name}
+--For School Project--`
+    )
 
     if (result) {
         res.json({ status: 0 });
