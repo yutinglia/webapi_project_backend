@@ -1,0 +1,1065 @@
+---
+openapi: 3.0.0
+info:
+  title: The Canine Shelter API
+  description: |
+    This is The Canine Shelter API.
+  contact:
+    email: yutinglia@gmail.com
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/y988/webapi_project/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: http://localhost:3001
+tags:
+- name: index
+  description: nothing
+- name: dogs
+  description: About the dogs in our shelter
+- name: shelters
+  description: Our shelters information
+- name: users
+  description: Operations about user
+- name: login
+  description: Operations about login
+- name: favorites
+  description: User dog favorites
+- name: sign-up-code
+  description: Worker sign up code
+- name: messages
+  description: Messages
+paths:
+  /:
+    get:
+      tags:
+      - index
+      summary: for server status checking
+      operationId: index
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasicResult'
+  /dogs:
+    get:
+      tags:
+      - dogs
+      summary: Get dogs by query
+      operationId: getDogs
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination. If no, then get all.
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Data count of each page
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: integer
+      - name: search
+        in: query
+        description: Dog name or type that need to be considered for filter
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: string
+      - name: shelter
+        in: query
+        description: Shelter id that need to be considered for filter
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+    post:
+      tags:
+      - dogs
+      summary: Add dog
+      operationId: addDog
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DogRequert'
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        "401":
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResult'
+      security:
+      - BearerAuth: []
+  /dogs/{id}:
+    get:
+      tags:
+      - dogs
+      summary: Get dog by id
+      operationId: getDogsByID
+      parameters:
+      - name: id
+        in: path
+        description: Dog id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_2'
+    put:
+      tags:
+      - dogs
+      summary: Edit dog by id
+      operationId: editDogByID
+      parameters:
+      - name: id
+        in: path
+        description: Dog id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DogRequert'
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        "401":
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResult'
+      security:
+      - BearerAuth: []
+    delete:
+      tags:
+      - dogs
+      summary: Delete dog by id
+      operationId: deleteDogsByID
+      parameters:
+      - name: id
+        in: path
+        description: Dog id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        "401":
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResult'
+      security:
+      - BearerAuth: []
+  /favorites:
+    get:
+      tags:
+      - favorites
+      summary: Get current user favorites by bearer token
+      operationId: getFavorites
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_3'
+        "401":
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResult'
+      security:
+      - BearerAuth: []
+    post:
+      tags:
+      - favorites
+      summary: Add dog to current user favorites by bearer token
+      operationId: addFavorites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/favorites_body'
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        "401":
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResult'
+      security:
+      - BearerAuth: []
+  /favorites/{dogID}:
+    delete:
+      tags:
+      - favorites
+      summary: delete dog from current user favorites by bearer token
+      operationId: deleteFavorites
+      parameters:
+      - name: dogID
+        in: path
+        description: Dog id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        "401":
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResult'
+      security:
+      - BearerAuth: []
+  /login:
+    post:
+      tags:
+      - login
+      summary: Login
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/login_body'
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_4'
+  /login/google:
+    post:
+      tags:
+      - login
+      summary: Login with google
+      operationId: loginWithGoogle
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/login_google_body'
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_4'
+  /messages:
+    get:
+      tags:
+      - messages
+      summary: Get all chats info
+      operationId: getChats
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_5'
+        "401":
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResult'
+      security:
+      - BearerAuth: []
+  /messages/{userID}:
+    get:
+      tags:
+      - messages
+      summary: Get all message by chat owner user id
+      operationId: getMessages
+      parameters:
+      - name: userID
+        in: path
+        description: chat owner user id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_6'
+        "401":
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResult'
+      security:
+      - BearerAuth: []
+    post:
+      tags:
+      - messages
+      summary: Send message by chat owner user id
+      operationId: sendMessages
+      parameters:
+      - name: userID
+        in: path
+        description: chat owner user id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/messages_userID_body'
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        "401":
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResult'
+      security:
+      - BearerAuth: []
+  /messages/{id}:
+    delete:
+      tags:
+      - messages
+      summary: Delete message by message id
+      operationId: deleteMessages
+      parameters:
+      - name: id
+        in: path
+        description: message id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        "401":
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResult'
+      security:
+      - BearerAuth: []
+  /messages/self:
+    get:
+      tags:
+      - messages
+      summary: Get message by current user
+      operationId: getSelfMessages
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_6'
+        "401":
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResult'
+      security:
+      - BearerAuth: []
+    post:
+      tags:
+      - messages
+      summary: Send message by current user
+      operationId: sendMessagesForSelf
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/messages_self_body'
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        "401":
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResult'
+      security:
+      - BearerAuth: []
+  /shelters:
+    get:
+      tags:
+      - shelters
+      summary: Get All Shelters
+      operationId: getShelters
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_7'
+    post:
+      tags:
+      - shelters
+      summary: Add shelter
+      operationId: addShelter
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/shelters_body'
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        "401":
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResult'
+      security:
+      - BearerAuth: []
+  /sign-up-code:
+    get:
+      tags:
+      - sign-up-code
+      summary: Get All sign up code
+      operationId: getSignUpCodes
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_8'
+        "401":
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResult'
+      security:
+      - BearerAuth: []
+    post:
+      tags:
+      - sign-up-code
+      summary: Add Sign Up Codes
+      operationId: addSignUpCodes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/signupcode_body'
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        "401":
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResult'
+      security:
+      - BearerAuth: []
+  /users:
+    post:
+      tags:
+      - users
+      summary: Sign Up / Register
+      operationId: register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/users_body'
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_9'
+  /users/self:
+    get:
+      tags:
+      - users
+      summary: Get current user information
+      operationId: getSelfInfo
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_10'
+        "401":
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResult'
+      security:
+      - BearerAuth: []
+  /users/self/google:
+    get:
+      tags:
+      - users
+      summary: Get current user google information
+      operationId: getSelfGoogleInfo
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_11'
+        "401":
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResult'
+      security:
+      - BearerAuth: []
+    post:
+      tags:
+      - users
+      summary: Add google sign in data
+      operationId: addGoogleSignInData
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/self_google_body'
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        "401":
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResult'
+      security:
+      - BearerAuth: []
+components:
+  schemas:
+    Dog:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          description: Dog type
+        name:
+          type: string
+        birthdat:
+          type: string
+        shelter:
+          type: integer
+          description: shelter id
+        chip_id:
+          type: integer
+        img:
+          type: string
+          description: dog image path
+      description: Dog information
+    UnauthorizedErrorResult:
+      type: object
+      properties:
+        err:
+          type: string
+          description: error message
+          enum:
+          - Unauthorized!
+      description: Unauthorized result format
+    BasicResult:
+      type: object
+      properties:
+        status:
+          type: integer
+          description: 0 = success
+          enum:
+          - 0
+      description: All API result basic format
+    BasicErrorResult:
+      type: object
+      properties:
+        status:
+          type: integer
+          description: 1 = server error or fail, 2 = invalid input
+          enum:
+          - 1
+          - 2
+        err:
+          type: string
+          description: error message
+      description: All API error result basic format
+    AuthorizedResult:
+      description: Authorized API result format
+      allOf:
+      - $ref: '#/components/schemas/BasicResult'
+      - type: object
+        properties:
+          newToken:
+            type: string
+            description: new access token (jwt)
+    AuthorizedErrorResult:
+      description: Authorized API error result format
+      allOf:
+      - $ref: '#/components/schemas/BasicErrorResult'
+      - type: object
+        properties:
+          newToken:
+            type: string
+            description: new access token (jwt)
+    DogResult:
+      description: Dog result format
+      allOf:
+      - $ref: '#/components/schemas/BasicResult'
+      - type: object
+        properties:
+          dog:
+            $ref: '#/components/schemas/Dog'
+    DogsResult:
+      description: Dogs result format
+      allOf:
+      - $ref: '#/components/schemas/BasicResult'
+      - type: object
+        properties:
+          dogs:
+            type: array
+            description: list of dog information
+            items:
+              $ref: '#/components/schemas/Dog'
+    DogRequert:
+      required:
+      - birthday
+      - chip_id
+      - name
+      - shelter
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: Dog type
+        name:
+          type: string
+        birthday:
+          type: string
+        shelter:
+          type: integer
+          description: shelter id
+        chip_id:
+          type: integer
+        image:
+          type: string
+          description: dog image
+          format: binary
+      description: Dog information
+    Favorite:
+      type: object
+      properties:
+        user:
+          type: integer
+          description: user id
+        dog:
+          type: integer
+          description: dog id
+      description: Favorites data
+    FavoritesResult:
+      description: Favorites result format
+      allOf:
+      - $ref: '#/components/schemas/AuthorizedResult'
+      - type: object
+        properties:
+          favorites:
+            type: array
+            description: list of favorites information
+            items:
+              $ref: '#/components/schemas/Favorite'
+    LoginResult:
+      description: Login result format
+      allOf:
+      - $ref: '#/components/schemas/BasicResult'
+      - type: object
+        properties:
+          token:
+            type: string
+            description: access token
+          user:
+            $ref: '#/components/schemas/LoginResult_user'
+    ChatsResult:
+      description: Chats result format
+      allOf:
+      - $ref: '#/components/schemas/AuthorizedResult'
+      - type: object
+        properties:
+          chats:
+            $ref: '#/components/schemas/ChatsResult_chats'
+    MessagesResult:
+      description: Messages result format
+      allOf:
+      - $ref: '#/components/schemas/AuthorizedResult'
+      - type: object
+        properties:
+          messages:
+            type: array
+            items:
+              $ref: '#/components/schemas/MessagesResult_messages'
+    SheltersResult:
+      description: Shelters result format
+      allOf:
+      - $ref: '#/components/schemas/BasicResult'
+      - type: object
+        properties:
+          shelters:
+            type: array
+            items:
+              $ref: '#/components/schemas/SheltersResult_shelters'
+    SignUpCodesResult:
+      description: Sign up code result format
+      allOf:
+      - $ref: '#/components/schemas/AuthorizedResult'
+      - type: object
+        properties:
+          codes:
+            type: array
+            items:
+              $ref: '#/components/schemas/SignUpCodesResult_codes'
+    inline_response_200:
+      oneOf:
+      - $ref: '#/components/schemas/DogsResult'
+      - $ref: '#/components/schemas/BasicErrorResult'
+    inline_response_200_1:
+      oneOf:
+      - $ref: '#/components/schemas/AuthorizedResult'
+      - $ref: '#/components/schemas/AuthorizedErrorResult'
+    inline_response_200_2:
+      oneOf:
+      - $ref: '#/components/schemas/DogResult'
+      - $ref: '#/components/schemas/BasicErrorResult'
+    inline_response_200_3:
+      oneOf:
+      - $ref: '#/components/schemas/FavoritesResult'
+      - $ref: '#/components/schemas/AuthorizedErrorResult'
+    favorites_body:
+      type: object
+      properties:
+        dogID:
+          type: string
+    login_body:
+      type: object
+      properties:
+        ac:
+          type: string
+        pw:
+          type: string
+    inline_response_200_4:
+      oneOf:
+      - $ref: '#/components/schemas/LoginResult'
+      - $ref: '#/components/schemas/BasicErrorResult'
+    login_google_body:
+      type: object
+      properties:
+        googleToken:
+          type: string
+          description: Google sign in token (Google Identity)
+          externalDocs:
+            description: More information
+            url: https://developers.google.com/identity/gsi/web
+    inline_response_200_5:
+      oneOf:
+      - $ref: '#/components/schemas/ChatsResult'
+      - $ref: '#/components/schemas/AuthorizedErrorResult'
+    inline_response_200_6:
+      oneOf:
+      - $ref: '#/components/schemas/MessagesResult'
+      - $ref: '#/components/schemas/AuthorizedErrorResult'
+    messages_userID_body:
+      type: object
+      properties:
+        msg:
+          type: string
+    messages_self_body:
+      type: object
+      properties:
+        msg:
+          type: string
+    inline_response_200_7:
+      oneOf:
+      - $ref: '#/components/schemas/SheltersResult'
+      - $ref: '#/components/schemas/BasicErrorResult'
+    shelters_body:
+      type: object
+      properties:
+        name:
+          type: string
+        address:
+          type: string
+    inline_response_200_8:
+      oneOf:
+      - $ref: '#/components/schemas/SignUpCodesResult'
+      - $ref: '#/components/schemas/BasicErrorResult'
+    signupcode_body:
+      type: object
+      properties:
+        code:
+          type: string
+    users_body:
+      required:
+      - ac
+      - pw
+      - type
+      type: object
+      properties:
+        ac:
+          type: string
+        pw:
+          type: string
+        code:
+          type: string
+          description: sign up code
+        type:
+          type: integer
+          description: user type (0 = admin, 1 = workers, 2 = public)
+          enum:
+          - 0
+          - 1
+          - 2
+    inline_response_200_9:
+      oneOf:
+      - $ref: '#/components/schemas/BasicResult'
+      - $ref: '#/components/schemas/BasicErrorResult'
+    inline_response_200_10:
+      oneOf:
+      - description: User info result format
+        allOf:
+        - $ref: '#/components/schemas/AuthorizedResult'
+        - type: object
+          properties:
+            user:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: user id
+                username:
+                  type: string
+                type:
+                  type: string
+                  description: user type (0 = admin, 1 = workers, 2 = public)
+                  enum:
+                  - "0"
+                  - "1"
+                  - "2"
+      - $ref: '#/components/schemas/AuthorizedErrorResult'
+    inline_response_200_11:
+      oneOf:
+      - description: User google info result format
+        allOf:
+        - $ref: '#/components/schemas/AuthorizedResult'
+        - type: object
+          properties:
+            google:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: google id
+                email:
+                  type: string
+      - $ref: '#/components/schemas/AuthorizedErrorResult'
+    self_google_body:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Google Identity
+    LoginResult_user:
+      type: object
+      properties:
+        id:
+          type: string
+          description: user id
+        username:
+          type: string
+        type:
+          type: string
+          description: user type (0 = admin, 1 = workers, 2 = public)
+          enum:
+          - "0"
+          - "1"
+          - "2"
+      example: null
+    ChatsResult_chats:
+      type: object
+      properties:
+        last_msg_datetime:
+          type: string
+        user:
+          type: integer
+          description: user id for chat owner
+        username:
+          type: string
+          description: username for chat owner
+        sender:
+          type: integer
+          description: user id for last message sender
+        sender_name:
+          type: string
+          description: username for last message sender
+        msg:
+          type: string
+          description: last message
+      example: null
+    MessagesResult_messages:
+      type: object
+      properties:
+        user:
+          type: integer
+          description: user id for chat owner
+        username:
+          type: string
+          description: username for chat owner
+        sender:
+          type: integer
+          description: user id for message sender
+        sender_name:
+          type: string
+          description: username for message sender
+        msg:
+          type: string
+          description: message context
+        msg_datetime:
+          type: string
+          description: message sended datetime
+        id:
+          type: string
+          description: message id
+      example: null
+    SheltersResult_shelters:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        address:
+          type: string
+      example: null
+    SignUpCodesResult_codes:
+      type: object
+      properties:
+        id:
+          type: integer
+        code:
+          type: string
+        enable:
+          type: boolean
+      example: null
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

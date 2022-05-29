@@ -66,8 +66,9 @@ Shelter: ${shelterInfo.name}
     }
 }));
 
-router.put('/', dogImgUpload.single('image'), asyncHandler(async function (req, res, next) {
-    const { id, name, type, chip_id, birthday, shelter } = req.body;
+router.put('/:id', dogImgUpload.single('image'), asyncHandler(async function (req, res, next) {
+    const { id } = req.params;
+    const { name, type, chip_id, birthday, shelter } = req.body;
     if (!id, !name || !type || !chip_id || !birthday || !shelter) { return res.status(500).send({ status: 2, err: "Please PUT all data" }); }
     // console.log(name, type, chip, birthday, shelter);
     // console.log(req.body);

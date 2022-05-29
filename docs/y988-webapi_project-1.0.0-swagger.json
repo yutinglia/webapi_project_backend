@@ -1,0 +1,1516 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "This is The Canine Shelter API.\n",
+    "version" : "1.0.0",
+    "title" : "The Canine Shelter API",
+    "contact" : {
+      "email" : "yutinglia@gmail.com"
+    }
+  },
+  "servers" : [ {
+    "description" : "SwaggerHub API Auto Mocking",
+    "url" : "https://virtserver.swaggerhub.com/y988/webapi_project/1.0.0"
+  }, {
+    "url" : "http://localhost:3001"
+  } ],
+  "tags" : [ {
+    "name" : "index",
+    "description" : "nothing"
+  }, {
+    "name" : "dogs",
+    "description" : "About the dogs in our shelter"
+  }, {
+    "name" : "shelters",
+    "description" : "Our shelters information"
+  }, {
+    "name" : "users",
+    "description" : "Operations about user"
+  }, {
+    "name" : "login",
+    "description" : "Operations about login"
+  }, {
+    "name" : "favorites",
+    "description" : "User dog favorites"
+  }, {
+    "name" : "sign-up-code",
+    "description" : "Worker sign up code"
+  }, {
+    "name" : "messages",
+    "description" : "Messages"
+  } ],
+  "paths" : {
+    "/" : {
+      "get" : {
+        "tags" : [ "index" ],
+        "summary" : "for server status checking",
+        "operationId" : "index",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BasicResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dogs" : {
+      "get" : {
+        "tags" : [ "dogs" ],
+        "summary" : "Get dogs by query",
+        "operationId" : "getDogs",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/DogsResult"
+                  }, {
+                    "$ref" : "#/components/schemas/BasicErrorResult"
+                  } ]
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "page",
+          "in" : "query",
+          "description" : "Page number for pagination. If no, then get all.",
+          "required" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Data count of each page",
+          "required" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "name" : "search",
+          "in" : "query",
+          "description" : "Dog name or type that need to be considered for filter",
+          "required" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "shelter",
+          "in" : "query",
+          "description" : "Shelter id that need to be considered for filter",
+          "required" : false,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ]
+      },
+      "post" : {
+        "tags" : [ "dogs" ],
+        "summary" : "Add dog",
+        "operationId" : "addDog",
+        "security" : [ {
+          "BearerAuth" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/AuthorizedResult"
+                  }, {
+                    "$ref" : "#/components/schemas/AuthorizedErrorResult"
+                  } ]
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnauthorizedErrorResult"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DogRequert"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dogs/{id}" : {
+      "get" : {
+        "tags" : [ "dogs" ],
+        "summary" : "Get dog by id",
+        "operationId" : "getDogsByID",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/DogResult"
+                  }, {
+                    "$ref" : "#/components/schemas/BasicErrorResult"
+                  } ]
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Dog id",
+          "required" : true,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ]
+      },
+      "put" : {
+        "tags" : [ "dogs" ],
+        "summary" : "Edit dog by id",
+        "operationId" : "editDogByID",
+        "security" : [ {
+          "BearerAuth" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/AuthorizedResult"
+                  }, {
+                    "$ref" : "#/components/schemas/AuthorizedErrorResult"
+                  } ]
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnauthorizedErrorResult"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Dog id",
+          "required" : true,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DogRequert"
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "dogs" ],
+        "summary" : "Delete dog by id",
+        "operationId" : "deleteDogsByID",
+        "security" : [ {
+          "BearerAuth" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/AuthorizedResult"
+                  }, {
+                    "$ref" : "#/components/schemas/AuthorizedErrorResult"
+                  } ]
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnauthorizedErrorResult"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Dog id",
+          "required" : true,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ]
+      }
+    },
+    "/favorites" : {
+      "get" : {
+        "tags" : [ "favorites" ],
+        "summary" : "Get current user favorites by bearer token",
+        "operationId" : "getFavorites",
+        "security" : [ {
+          "BearerAuth" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/FavoritesResult"
+                  }, {
+                    "$ref" : "#/components/schemas/AuthorizedErrorResult"
+                  } ]
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnauthorizedErrorResult"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "favorites" ],
+        "summary" : "Add dog to current user favorites by bearer token",
+        "operationId" : "addFavorites",
+        "security" : [ {
+          "BearerAuth" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/AuthorizedResult"
+                  }, {
+                    "$ref" : "#/components/schemas/AuthorizedErrorResult"
+                  } ]
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnauthorizedErrorResult"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "dogID" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/favorites/{dogID}" : {
+      "delete" : {
+        "tags" : [ "favorites" ],
+        "summary" : "delete dog from current user favorites by bearer token",
+        "operationId" : "deleteFavorites",
+        "security" : [ {
+          "BearerAuth" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/AuthorizedResult"
+                  }, {
+                    "$ref" : "#/components/schemas/AuthorizedErrorResult"
+                  } ]
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnauthorizedErrorResult"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "dogID",
+          "in" : "path",
+          "description" : "Dog id",
+          "required" : true,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ]
+      }
+    },
+    "/login" : {
+      "post" : {
+        "tags" : [ "login" ],
+        "summary" : "Login",
+        "operationId" : "login",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/LoginResult"
+                  }, {
+                    "$ref" : "#/components/schemas/BasicErrorResult"
+                  } ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "ac" : {
+                    "type" : "string"
+                  },
+                  "pw" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login/google" : {
+      "post" : {
+        "tags" : [ "login" ],
+        "summary" : "Login with google",
+        "operationId" : "loginWithGoogle",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/LoginResult"
+                  }, {
+                    "$ref" : "#/components/schemas/BasicErrorResult"
+                  } ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "googleToken" : {
+                    "type" : "string",
+                    "description" : "Google sign in token (Google Identity)",
+                    "externalDocs" : {
+                      "description" : "More information",
+                      "url" : "https://developers.google.com/identity/gsi/web"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/messages" : {
+      "get" : {
+        "tags" : [ "messages" ],
+        "summary" : "Get all chats info",
+        "operationId" : "getChats",
+        "security" : [ {
+          "BearerAuth" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/ChatsResult"
+                  }, {
+                    "$ref" : "#/components/schemas/AuthorizedErrorResult"
+                  } ]
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnauthorizedErrorResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/messages/{userID}" : {
+      "get" : {
+        "tags" : [ "messages" ],
+        "summary" : "Get all message by chat owner user id",
+        "operationId" : "getMessages",
+        "security" : [ {
+          "BearerAuth" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/MessagesResult"
+                  }, {
+                    "$ref" : "#/components/schemas/AuthorizedErrorResult"
+                  } ]
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnauthorizedErrorResult"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "userID",
+          "in" : "path",
+          "description" : "chat owner user id",
+          "required" : true,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ]
+      },
+      "post" : {
+        "tags" : [ "messages" ],
+        "summary" : "Send message by chat owner user id",
+        "operationId" : "sendMessages",
+        "security" : [ {
+          "BearerAuth" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/AuthorizedResult"
+                  }, {
+                    "$ref" : "#/components/schemas/AuthorizedErrorResult"
+                  } ]
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnauthorizedErrorResult"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "userID",
+          "in" : "path",
+          "description" : "chat owner user id",
+          "required" : true,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "msg" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/messages/{id}" : {
+      "delete" : {
+        "tags" : [ "messages" ],
+        "summary" : "Delete message by message id",
+        "operationId" : "deleteMessages",
+        "security" : [ {
+          "BearerAuth" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/AuthorizedResult"
+                  }, {
+                    "$ref" : "#/components/schemas/AuthorizedErrorResult"
+                  } ]
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnauthorizedErrorResult"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "message id",
+          "required" : true,
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ]
+      }
+    },
+    "/messages/self" : {
+      "get" : {
+        "tags" : [ "messages" ],
+        "summary" : "Get message by current user",
+        "operationId" : "getSelfMessages",
+        "security" : [ {
+          "BearerAuth" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/MessagesResult"
+                  }, {
+                    "$ref" : "#/components/schemas/AuthorizedErrorResult"
+                  } ]
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnauthorizedErrorResult"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "messages" ],
+        "summary" : "Send message by current user",
+        "operationId" : "sendMessagesForSelf",
+        "security" : [ {
+          "BearerAuth" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/AuthorizedResult"
+                  }, {
+                    "$ref" : "#/components/schemas/AuthorizedErrorResult"
+                  } ]
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnauthorizedErrorResult"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "msg" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/shelters" : {
+      "get" : {
+        "tags" : [ "shelters" ],
+        "summary" : "Get All Shelters",
+        "operationId" : "getShelters",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/SheltersResult"
+                  }, {
+                    "$ref" : "#/components/schemas/BasicErrorResult"
+                  } ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "shelters" ],
+        "summary" : "Add shelter",
+        "operationId" : "addShelter",
+        "security" : [ {
+          "BearerAuth" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/AuthorizedResult"
+                  }, {
+                    "$ref" : "#/components/schemas/AuthorizedErrorResult"
+                  } ]
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnauthorizedErrorResult"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "name" : {
+                    "type" : "string"
+                  },
+                  "address" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sign-up-code" : {
+      "get" : {
+        "tags" : [ "sign-up-code" ],
+        "summary" : "Get All sign up code",
+        "operationId" : "getSignUpCodes",
+        "security" : [ {
+          "BearerAuth" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/SignUpCodesResult"
+                  }, {
+                    "$ref" : "#/components/schemas/BasicErrorResult"
+                  } ]
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnauthorizedErrorResult"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "sign-up-code" ],
+        "summary" : "Add Sign Up Codes",
+        "operationId" : "addSignUpCodes",
+        "security" : [ {
+          "BearerAuth" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/AuthorizedResult"
+                  }, {
+                    "$ref" : "#/components/schemas/AuthorizedErrorResult"
+                  } ]
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnauthorizedErrorResult"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "code" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users" : {
+      "post" : {
+        "tags" : [ "users" ],
+        "summary" : "Sign Up / Register",
+        "operationId" : "register",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/BasicResult"
+                  }, {
+                    "$ref" : "#/components/schemas/BasicErrorResult"
+                  } ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "ac" : {
+                    "type" : "string"
+                  },
+                  "pw" : {
+                    "type" : "string"
+                  },
+                  "code" : {
+                    "type" : "string",
+                    "description" : "sign up code"
+                  },
+                  "type" : {
+                    "type" : "integer",
+                    "description" : "user type (0 = admin, 1 = workers, 2 = public)",
+                    "enum" : [ 0, 1, 2 ]
+                  }
+                },
+                "required" : [ "ac", "pw", "type" ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/self" : {
+      "get" : {
+        "tags" : [ "users" ],
+        "summary" : "Get current user information",
+        "operationId" : "getSelfInfo",
+        "security" : [ {
+          "BearerAuth" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "description" : "User info result format",
+                    "allOf" : [ {
+                      "$ref" : "#/components/schemas/AuthorizedResult"
+                    }, {
+                      "type" : "object",
+                      "properties" : {
+                        "user" : {
+                          "type" : "object",
+                          "properties" : {
+                            "id" : {
+                              "type" : "string",
+                              "description" : "user id"
+                            },
+                            "username" : {
+                              "type" : "string"
+                            },
+                            "type" : {
+                              "type" : "string",
+                              "description" : "user type (0 = admin, 1 = workers, 2 = public)",
+                              "enum" : [ 0, 1, 2 ]
+                            }
+                          }
+                        }
+                      }
+                    } ]
+                  }, {
+                    "$ref" : "#/components/schemas/AuthorizedErrorResult"
+                  } ]
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnauthorizedErrorResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/self/google" : {
+      "get" : {
+        "tags" : [ "users" ],
+        "summary" : "Get current user google information",
+        "operationId" : "getSelfGoogleInfo",
+        "security" : [ {
+          "BearerAuth" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "description" : "User google info result format",
+                    "allOf" : [ {
+                      "$ref" : "#/components/schemas/AuthorizedResult"
+                    }, {
+                      "type" : "object",
+                      "properties" : {
+                        "google" : {
+                          "type" : "object",
+                          "properties" : {
+                            "id" : {
+                              "type" : "string",
+                              "description" : "google id"
+                            },
+                            "email" : {
+                              "type" : "string"
+                            }
+                          }
+                        }
+                      }
+                    } ]
+                  }, {
+                    "$ref" : "#/components/schemas/AuthorizedErrorResult"
+                  } ]
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnauthorizedErrorResult"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "users" ],
+        "summary" : "Add google sign in data",
+        "operationId" : "addGoogleSignInData",
+        "security" : [ {
+          "BearerAuth" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/AuthorizedResult"
+                  }, {
+                    "$ref" : "#/components/schemas/AuthorizedErrorResult"
+                  } ]
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "unauthorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnauthorizedErrorResult"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "token" : {
+                    "type" : "string",
+                    "description" : "Google Identity"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Dog" : {
+        "type" : "object",
+        "description" : "Dog information",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "Dog type"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "birthdat" : {
+            "type" : "string"
+          },
+          "shelter" : {
+            "type" : "integer",
+            "description" : "shelter id"
+          },
+          "chip_id" : {
+            "type" : "integer"
+          },
+          "img" : {
+            "type" : "string",
+            "description" : "dog image path"
+          }
+        }
+      },
+      "UnauthorizedErrorResult" : {
+        "type" : "object",
+        "description" : "Unauthorized result format",
+        "properties" : {
+          "err" : {
+            "type" : "string",
+            "description" : "error message",
+            "enum" : [ "Unauthorized!" ]
+          }
+        }
+      },
+      "BasicResult" : {
+        "type" : "object",
+        "description" : "All API result basic format",
+        "properties" : {
+          "status" : {
+            "type" : "integer",
+            "description" : "0 = success",
+            "enum" : [ 0 ]
+          }
+        }
+      },
+      "BasicErrorResult" : {
+        "type" : "object",
+        "description" : "All API error result basic format",
+        "properties" : {
+          "status" : {
+            "type" : "integer",
+            "description" : "1 = server error or fail, 2 = invalid input",
+            "enum" : [ 1, 2 ]
+          },
+          "err" : {
+            "type" : "string",
+            "description" : "error message"
+          }
+        }
+      },
+      "AuthorizedResult" : {
+        "description" : "Authorized API result format",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/BasicResult"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "newToken" : {
+              "description" : "new access token (jwt)",
+              "type" : "string"
+            }
+          }
+        } ]
+      },
+      "AuthorizedErrorResult" : {
+        "description" : "Authorized API error result format",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/BasicErrorResult"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "newToken" : {
+              "description" : "new access token (jwt)",
+              "type" : "string"
+            }
+          }
+        } ]
+      },
+      "DogResult" : {
+        "description" : "Dog result format",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/BasicResult"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "dog" : {
+              "description" : "dog information",
+              "$ref" : "#/components/schemas/Dog"
+            }
+          }
+        } ]
+      },
+      "DogsResult" : {
+        "description" : "Dogs result format",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/BasicResult"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "dogs" : {
+              "description" : "list of dog information",
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/Dog"
+              }
+            }
+          }
+        } ]
+      },
+      "DogRequert" : {
+        "type" : "object",
+        "description" : "Dog information",
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "description" : "Dog type"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "birthday" : {
+            "type" : "string"
+          },
+          "shelter" : {
+            "type" : "integer",
+            "description" : "shelter id"
+          },
+          "chip_id" : {
+            "type" : "integer"
+          },
+          "image" : {
+            "type" : "string",
+            "format" : "binary",
+            "description" : "dog image"
+          }
+        },
+        "required" : [ "type", "name", "birthday", "shelter", "chip_id" ]
+      },
+      "Favorite" : {
+        "description" : "Favorites data",
+        "type" : "object",
+        "properties" : {
+          "user" : {
+            "type" : "integer",
+            "description" : "user id"
+          },
+          "dog" : {
+            "type" : "integer",
+            "description" : "dog id"
+          }
+        }
+      },
+      "FavoritesResult" : {
+        "description" : "Favorites result format",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/AuthorizedResult"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "favorites" : {
+              "description" : "list of favorites information",
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/Favorite"
+              }
+            }
+          }
+        } ]
+      },
+      "LoginResult" : {
+        "description" : "Login result format",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/BasicResult"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "token" : {
+              "type" : "string",
+              "description" : "access token"
+            },
+            "user" : {
+              "type" : "object",
+              "properties" : {
+                "id" : {
+                  "type" : "string",
+                  "description" : "user id"
+                },
+                "username" : {
+                  "type" : "string"
+                },
+                "type" : {
+                  "type" : "string",
+                  "description" : "user type (0 = admin, 1 = workers, 2 = public)",
+                  "enum" : [ 0, 1, 2 ]
+                }
+              }
+            }
+          }
+        } ]
+      },
+      "ChatsResult" : {
+        "description" : "Chats result format",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/AuthorizedResult"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "chats" : {
+              "type" : "object",
+              "properties" : {
+                "last_msg_datetime" : {
+                  "type" : "string"
+                },
+                "user" : {
+                  "type" : "integer",
+                  "description" : "user id for chat owner"
+                },
+                "username" : {
+                  "type" : "string",
+                  "description" : "username for chat owner"
+                },
+                "sender" : {
+                  "type" : "integer",
+                  "description" : "user id for last message sender"
+                },
+                "sender_name" : {
+                  "type" : "string",
+                  "description" : "username for last message sender"
+                },
+                "msg" : {
+                  "type" : "string",
+                  "description" : "last message"
+                }
+              }
+            }
+          }
+        } ]
+      },
+      "MessagesResult" : {
+        "description" : "Messages result format",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/AuthorizedResult"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "messages" : {
+              "type" : "array",
+              "items" : {
+                "type" : "object",
+                "properties" : {
+                  "user" : {
+                    "type" : "integer",
+                    "description" : "user id for chat owner"
+                  },
+                  "username" : {
+                    "type" : "string",
+                    "description" : "username for chat owner"
+                  },
+                  "sender" : {
+                    "type" : "integer",
+                    "description" : "user id for message sender"
+                  },
+                  "sender_name" : {
+                    "type" : "string",
+                    "description" : "username for message sender"
+                  },
+                  "msg" : {
+                    "type" : "string",
+                    "description" : "message context"
+                  },
+                  "msg_datetime" : {
+                    "type" : "string",
+                    "description" : "message sended datetime"
+                  },
+                  "id" : {
+                    "type" : "string",
+                    "description" : "message id"
+                  }
+                }
+              }
+            }
+          }
+        } ]
+      },
+      "SheltersResult" : {
+        "description" : "Shelters result format",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/BasicResult"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "shelters" : {
+              "type" : "array",
+              "items" : {
+                "type" : "object",
+                "properties" : {
+                  "id" : {
+                    "type" : "integer"
+                  },
+                  "name" : {
+                    "type" : "string"
+                  },
+                  "address" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        } ]
+      },
+      "SignUpCodesResult" : {
+        "description" : "Sign up code result format",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/AuthorizedResult"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "codes" : {
+              "type" : "array",
+              "items" : {
+                "type" : "object",
+                "properties" : {
+                  "id" : {
+                    "type" : "integer"
+                  },
+                  "code" : {
+                    "type" : "string"
+                  },
+                  "enable" : {
+                    "type" : "boolean"
+                  }
+                }
+              }
+            }
+          }
+        } ]
+      }
+    },
+    "securitySchemes" : {
+      "BearerAuth" : {
+        "type" : "http",
+        "scheme" : "bearer",
+        "bearerFormat" : "JWT"
+      }
+    }
+  }
+}

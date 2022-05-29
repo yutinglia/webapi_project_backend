@@ -21,7 +21,7 @@ exports.add = async function (shelter) {
     for (i = 0; i < values.length; i++) { pStr += '?,' }
     pStr = pStr.slice(0, -1)
     return await db.query({
-        query: `INSERT INTO dogs (${keys}) VALUES (${pStr})`,
+        query: `INSERT INTO shelters (${keys}) VALUES (${pStr})`,
         param: values
     })
 }

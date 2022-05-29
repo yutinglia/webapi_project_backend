@@ -1,0 +1,3 @@
+cd nodejs-server-server-generated
+yarn install
+yarn start

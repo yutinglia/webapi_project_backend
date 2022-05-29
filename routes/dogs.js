@@ -4,19 +4,6 @@ var dogs = require('../models/dogs');
 var config = require('../config');
 const asyncHandler = require('express-async-handler')
 
-/**
- * @openapi
- * /:
- *  get
- *      description: Returns all dog information and total dog count from database.
- *      responses:
- *          200:
- *              description: Returns a list of dogs
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/DogsModel'
- */
 router.get('/', asyncHandler(async function (req, res, next) {
     let { page, limit, search, shelter } = req.query;
     const queryValues = {

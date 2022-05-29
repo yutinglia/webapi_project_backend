@@ -22,6 +22,7 @@ var favoritesWithAuthLevel2Router = require('./routes/favoritesWithAuthLevel2')
 var messagesWithAuthLevel2Router = require('./routes/messagesWithAuthLevel2')
 var messagesWithAuthLevel1Router = require('./routes/messagesWithAuthLevel1')
 var signUpCodeWithAuthLevel0Router = require('./routes/signUpCodeWithAuthLevel0')
+var sheltersWithAuthLevel0Router = require('./routes/sheltersWithAuthLevel0')
 
 var app = express();
 
@@ -75,6 +76,7 @@ app.use('/messages', messagesWithAuthLevel1Router);
 // check user auth level higher then or equal to admin
 app.use(checkAuthLevel0);
 app.use('/sign-up-code', signUpCodeWithAuthLevel0Router);
+app.use('/shelters', sheltersWithAuthLevel0Router);
 
 
 // error handler
