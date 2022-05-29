@@ -1,7 +1,11 @@
 const db = require('../helpers/db');
 const { v4: uuidv4 } = require('uuid');
 
-exports.getAllChat = async function (id) {
+/**
+ * get all chats data
+ * @returns list of chats, including last message datetime, chat owner, last message sender and message content
+ */
+exports.getAllChat = async function () {
     return await db.query({
         query: `
         SELECT
@@ -21,6 +25,11 @@ exports.getAllChat = async function (id) {
     })
 }
 
+/**
+ * get chat all messages by owner user id
+ * @param {number} id user id
+ * @returns list of messages
+ */
 exports.getByUserID = async function (id) {
     return await db.query({
         query: `
@@ -41,10 +50,15 @@ exports.getByUserID = async function (id) {
     })
 }
 
-exports.add = async function (shelter) {
-    shelter.id = uuidv4();
-    let keys = Object.keys(shelter)
-    let values = Object.values(shelter)
+/**
+ * add message to database
+ * @param {object} message message from user
+ * @returns database result
+ */
+exports.add = async function (message) {
+    message.id = uuidv4();
+    let keys = Object.keys(message)
+    let values = Object.values(message)
     keys = keys.join(',')
     let pStr = ''
     for (i = 0; i < values.length; i++) { pStr += '?,' }
@@ -55,6 +69,11 @@ exports.add = async function (shelter) {
     })
 }
 
+/**
+ * delete message from database by message id
+ * @param {string} id message id
+ * @returns database result
+ */
 exports.delete = async function (id) {
     return await db.query({
         query: `DELETE FROM messages WHERE id=?`,

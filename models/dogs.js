@@ -1,5 +1,10 @@
 const db = require('../helpers/db');
 
+/**
+ * make a query array by simple query object for db makeQuery function
+ * @param {object} query query for search dogs
+ * @returns a query array for db makeQuery function
+ */
 const queryAdapter = (query) => {
     return (
         [
@@ -31,6 +36,13 @@ const queryAdapter = (query) => {
     )
 }
 
+/**
+ * get dogs array by pagination and query, pagination and query is optional.
+ * @param {number} page page number of pagination
+ * @param {number} limit page data count of pagination
+ * @param {string} query search dog by name and type and chip id
+ * @returns array of dog information from database
+ */
 exports.query = async function (page = -1, limit = -1, query = {}) {
     // page
     const pageInt = parseInt(page);
@@ -64,6 +76,11 @@ exports.query = async function (page = -1, limit = -1, query = {}) {
     })
 }
 
+/**
+ * search dog in the database by dog id
+ * @param {number} id dog id for search
+ * @returns dog object
+ */
 exports.getByID = async function (id) {
     return await db.query({
         query: `SELECT
@@ -84,6 +101,11 @@ exports.getByID = async function (id) {
     })
 }
 
+/**
+ * update dog data
+ * @param {object} dog dog object
+ * @returns database result
+ */
 exports.update = async function (dog) {
     // remove old undefined fields from object
     Object.keys(dog).forEach(key => dog[key] === undefined && delete dog[key])
@@ -104,6 +126,11 @@ exports.update = async function (dog) {
     })
 }
 
+/**
+ * get dogs count by query or get all dogs count
+ * @param {string} query dog name / type / chip id, optional
+ * @returns number of dogs
+ */
 exports.getCount = async function (query) {
     queryObj = db.makeQuery(query, queryAdapter);
     return await db.query({
@@ -112,6 +139,11 @@ exports.getCount = async function (query) {
     })
 }
 
+/**
+ * add dog data to database
+ * @param {object} dog dog object
+ * @returns database result
+ */
 exports.add = async function (dog) {
     // remove old undefined fields from object
     Object.keys(dog).forEach(key => dog[key] === undefined && delete dog[key])
@@ -127,6 +159,11 @@ exports.add = async function (dog) {
     })
 }
 
+/**
+ * delete dog by dog id
+ * @param {number} id dog id
+ * @returns database result
+ */
 exports.delete = async function (id) {
     return await db.query({
         query: `DELETE FROM dogs WHERE id=?`,
