@@ -1,5 +1,10 @@
 const db = require('../helpers/db');
 
+/**
+ * get user data by username
+ * @param {string} username username
+ * @returns user data
+ */
 exports.getByUsername = async function (username) {
     return await db.query({
         query: "SELECT * FROM USERS WHERE USERNAME=?",
@@ -7,6 +12,11 @@ exports.getByUsername = async function (username) {
     })
 }
 
+/**
+ * get user data by google identity
+ * @param {string} id google identity id
+ * @returns user data
+ */
 exports.getByGoogleID = async function (id) {
     return await db.query({
         query: "SELECT * FROM USERS WHERE google_oauth_id=?",
@@ -14,6 +24,11 @@ exports.getByGoogleID = async function (id) {
     })
 }
 
+/**
+ * add new user to database
+ * @param {object} user user object
+ * @returns database result
+ */
 exports.create = async function (user) {
     let keys = Object.keys(user)
     let values = Object.values(user)
@@ -27,6 +42,11 @@ exports.create = async function (user) {
     })
 }
 
+/**
+ * update user data from database
+ * @param {object} user user object
+ * @returns database result
+ */
 exports.update = async function (user) {
     // remove old undefined fields from object
     Object.keys(user).forEach(key => user[key] === undefined && delete user[key])

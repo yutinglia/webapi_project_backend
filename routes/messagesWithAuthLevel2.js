@@ -4,6 +4,7 @@ var messages = require('../models/messages');
 var config = require('../config');
 const asyncHandler = require('express-async-handler')
 
+// get current user message
 router.get('/self', asyncHandler(async function (req, res, next) {
     const { id } = req.user;
     const result = await messages.getByUserID(id);
@@ -14,6 +15,7 @@ router.get('/self', asyncHandler(async function (req, res, next) {
     }
 }));
 
+// current user send message
 router.post('/self', asyncHandler(async function (req, res, next) {
     const { msg } = req.body;
     const { id } = req.user;
