@@ -1,20 +1,11 @@
 const db = require('../helpers/db');
 
-/**
- * get all shelters data
- * @returns list of shelter
- */
 exports.getAll = async function () {
     return await db.query({
         query: `SELECT * FROM shelters`
     })
 }
 
-/**
- * get shelter data by shelter id
- * @param {number} id shelter id
- * @returns shelter data
- */
 exports.getByID = async function (id) {
     return await db.query({
         query: `SELECT * FROM shelters WHERE id =?`,
@@ -22,11 +13,6 @@ exports.getByID = async function (id) {
     })
 }
 
-/**
- * add shelter to database
- * @param {object} shelter shelter object including name and address
- * @returns database result
- */
 exports.add = async function (shelter) {
     let keys = Object.keys(shelter)
     let values = Object.values(shelter)

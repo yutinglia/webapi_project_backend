@@ -9,7 +9,6 @@ const asyncHandler = require('express-async-handler')
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(config.GOOGLE_CLIENT_ID);
 
-// login with username and password
 router.post('/', asyncHandler(async function (req, res, next) {
     const { ac, pw } = req.body;
     if (!ac || !pw) { return res.status(500).send({ status: 2, err: "Please POST ac & pw" }); }
@@ -28,7 +27,6 @@ router.post('/', asyncHandler(async function (req, res, next) {
     res.json({ status: 0, token: token, user: { id, username, type } });
 }));
 
-// login with google
 router.post('/google', asyncHandler(async function (req, res, next) {
     const { googleToken } = req.body;
     if (!googleToken) { return res.status(500).send({ status: 2, err: "Please POST google token" }); }

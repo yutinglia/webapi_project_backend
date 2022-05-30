@@ -5,7 +5,6 @@ var crypto = require('crypto')
 var users = require('../models/users');
 const asyncHandler = require('express-async-handler')
 
-// create new user
 router.post('/', asyncHandler(async function (req, res, next) {
     const { ac, pw, code, type } = req.body;
     if (!ac || !pw || !type) { return res.status(500).send({ status: 2, err: "Please POST ac & pw & code" }); }

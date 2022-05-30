@@ -4,7 +4,6 @@ var shelters = require('../models/shelters');
 var config = require('../config');
 const asyncHandler = require('express-async-handler')
 
-// add new shelter
 router.post('/', asyncHandler(async function (req, res, next) {
     const { name, address } = req.body;
     if (!name || !address) { return res.status(500).send({ status: 2, err: "Please POST all data" }); }

@@ -1,9 +1,8 @@
-var cookieParser = require('cookie-parser');
-var cors = require('cors')
 var express = require('express');
-var logger = require('morgan');
 var path = require('path');
-
+var cookieParser = require('cookie-parser');
+var logger = require('morgan');
+var cors = require('cors')
 var config = require('./config')
 
 var indexRouter = require('./routes/index');

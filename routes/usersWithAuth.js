@@ -7,13 +7,11 @@ const users = require('../models/users')
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(config.GOOGLE_CLIENT_ID);
 
-// get current user data
 router.get('/self', function (req, res, next) {
     const { id, username, type } = req.user;
     res.json({ status: 0, user: { id, username, type } });
 });
 
-// get current user google data
 router.get('/self/google', asyncHandler(async function (req, res, next) {
     const { username } = req.user;
     const result = await users.getByUsername(username);
@@ -21,7 +19,6 @@ router.get('/self/google', asyncHandler(async function (req, res, next) {
     res.json({ status: 0, google: { id: user.google_oauth_id, email: user.google_oauth_email } });
 }));
 
-// add google data
 router.post('/self/google', asyncHandler(async function (req, res, next) {
     const { id } = req.user;
     const { token } = req.body;

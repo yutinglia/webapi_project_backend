@@ -4,7 +4,6 @@ var messages = require('../models/messages');
 var config = require('../config');
 const asyncHandler = require('express-async-handler')
 
-// get chats
 router.get('/', asyncHandler(async function (req, res, next) {
     const result = await messages.getAllChat();
     if (result[0]) {
@@ -14,7 +13,6 @@ router.get('/', asyncHandler(async function (req, res, next) {
     }
 }));
 
-// get messages from chat
 router.get('/:userID', asyncHandler(async function (req, res, next) {
     const { userID } = req.params;
     const result = await messages.getByUserID(userID);
@@ -25,7 +23,6 @@ router.get('/:userID', asyncHandler(async function (req, res, next) {
     }
 }));
 
-// send messages to chat
 router.post('/:userID', asyncHandler(async function (req, res, next) {
     const { msg } = req.body;
     const { userID } = req.params;
@@ -34,7 +31,6 @@ router.post('/:userID', asyncHandler(async function (req, res, next) {
     res.json({ status: 0 });
 }));
 
-// delete messages from chat
 router.delete('/:id', asyncHandler(async function (req, res, next) {
     const { id } = req.params;
     await messages.delete(id);

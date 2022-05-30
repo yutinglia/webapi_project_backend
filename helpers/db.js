@@ -10,11 +10,6 @@ const pool = mariadb.createPool({
     allowPublicKeyRetrieval: true
 });
 
-/**
- * send query to database
- * @param {object} queryObj {sql, [param]}
- * @returns database results
- */
 const db_query = (queryObj) => new Promise((resolve, reject) => {
     if (!queryObj) reject("Please input queryObj{query:'sql query', param:[parameters]}");
     var { query, param } = queryObj;
@@ -65,12 +60,6 @@ exports.query = db_query;
     ]
 ]
 */
-/**
- * 
- * @param {object} query simples query object {key, value}
- * @param {*} queryAdapter change simple query to query object
- * @returns query object
- */
 exports.makeQuery = (query, queryAdapter) => {
     let queryList = queryAdapter(query);
     let processedQueryList = [];
@@ -100,11 +89,6 @@ exports.makeQuery = (query, queryAdapter) => {
     return { sql: querySql, param: queryValues };
 }
 
-/**
- * run multiple queries
- * @param {array} q query object array
- * @returns all database results
- */
 // if you need pass the select result or processed data to next query, please set param "pass_data" in next query
 exports.doTransaction = (q) => new Promise((resolve, reject) => {
     const querys = q;
